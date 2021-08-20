@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-var debug = require('debug')('cnpmjs.org:middleware:proxy_to_npm');
-var config = require('../config');
+var debug = require("debug")("cnpmjs.org:middleware:proxy_to_npm");
+var config = require("../config");
 
 module.exports = function (options) {
   var redirectUrl = config.sourceNpmRegistry;
@@ -17,8 +17,17 @@ module.exports = function (options) {
     /^\/(@[\w\-\.]+)\/[\w\-\.]+(?:\/[\w\-\.]+)?$/,
     /^\/\-\/package\/(@[\w\-\.]+)\/[\w\-\.]+\/dist\-tags/,
   ];
+  // npm命令url
+  var npmCmdUrls = [
+    // npm whoami
+    /^\/\-\/whoami$/,
+    // npm ping
+    /^\/\-\/ping\??[\w\d&=]*$/,
+  ];
+
   if (options && options.isWeb) {
-    redirectUrl = config.sourceNpmWeb || redirectUrl.replace('//registry.', '//');
+    redirectUrl =
+      config.sourceNpmWeb || redirectUrl.replace("//registry.", "//");
     proxyUrls = [
       // /package/:pkg
       /^\/package\/[\w\-\.]+/,
@@ -30,20 +39,34 @@ module.exports = function (options) {
   }
 
   return function* proxyToNpm(next) {
-    if (config.syncModel !== 'none') {
+    if (config.syncModel !== "none") {
       return yield next;
     }
 
     // syncModel === none
     // only proxy read requests
-    if (this.method !== 'GET' && this.method !== 'HEAD') {
+    if (this.method !== "GET" && this.method !== "HEAD") {
       return yield next;
     }
 
-    var pathname =  decodeURIComponent(this.path);
+    var pathname = decodeURIComponent(this.path);
 
     var isScoped = false;
     var isPublichScoped = false;
+    var isNpmCmdUrl = false;
+
+    // 是否npm命令请求
+    for (var i = 0; i < npmCmdUrls.length; i++) {
+      isNpmCmdUrl = npmCmdUrls[i].test(pathname);
+      if (isNpmCmdUrl) {
+        break;
+      }
+    }
+
+    if (isNpmCmdUrl) {
+      return yield next;
+    }
+
     // check scoped name
     if (config.scopes && config.scopes.length > 0) {
       for (var i = 0; i < scopedUrls.length; i++) {
@@ -73,8 +96,12 @@ module.exports = function (options) {
 
     if (isPublich || isPublichScoped) {
       var url = redirectUrl + this.url;
-      debug('proxy isPublich: %s, isPublichScoped: %s, package to %s',
-        isPublich, isPublichScoped, url);
+      debug(
+        "proxy isPublich: %s, isPublichScoped: %s, package to %s",
+        isPublich,
+        isPublichScoped,
+        url
+      );
       this.redirect(url);
       return;
     }
