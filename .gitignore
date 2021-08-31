@@ -23,6 +23,9 @@ backup/*.gz
 docs/web/history.md
 docs/web/_readme.md
 view/web/_layout.html
+docs/web-sunmi/history.md
+docs/web-sunmi/_readme.md
+view/web-sunmi/_layout.html
 bin/mysql.js
 bin/test.sql
 coverage/

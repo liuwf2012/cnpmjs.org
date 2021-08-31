@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
-var mkdirp = require('mkdirp');
-var copy = require('copy-to');
-var path = require('path');
-var fs = require('fs');
-var os = require('os');
-var utility = require('utility');
+var mkdirp = require("mkdirp");
+var copy = require("copy-to");
+var path = require("path");
+var fs = require("fs");
+var os = require("os");
+var utility = require("utility");
 
-var version = require('../package.json').version;
-var Nfs = require('fs-cnpm');
+var version = require("../package.json").version;
+var Nfs = require("fs-cnpm");
 var root = path.dirname(__dirname);
-var dataDir = path.join(process.env.HOME || root, '.cnpmjs.org');
+var dataDir = path.join(process.env.HOME || root, ".cnpmjs.org");
 
 var config = {
   version: version,
@@ -28,41 +28,44 @@ var config = {
 
   registryPort: 7001,
   webPort: 7002,
-  bindingHost: '127.0.0.1', // only binding on 127.0.0.1 for local access
+  bindingHost: "127.0.0.1", // only binding on 127.0.0.1 for local access
   // default is ctx.protocol
-  protocol: '',
+  protocol: "",
   // When sync package, cnpm not know the access protocol.
   // So should set manually
-  backupProtocol: 'http',
+  backupProtocol: "http",
 
   // debug mode
   // if in debug mode, some middleware like limit wont load
   // logger module will print to stdout
-  debug: process.env.NODE_ENV === 'development',
+  debug: process.env.NODE_ENV === "development",
   // page mode, enable on development env
-  pagemock: process.env.NODE_ENV === 'development',
+  pagemock: process.env.NODE_ENV === "development",
   // session secret
-  sessionSecret: 'cnpmjs.org test session secret',
+  sessionSecret: "cnpmjs.org test session secret",
   // max request json body size
-  jsonLimit: '10mb',
+  jsonLimit: "10mb",
   // log dir name
-  logdir: path.join(dataDir, 'logs'),
+  logdir: path.join(dataDir, "logs"),
   // update file template dir
-  uploadDir: path.join(dataDir, 'downloads'),
+  uploadDir: path.join(dataDir, "downloads"),
   // web page viewCache
   viewCache: false,
 
   // registry http response cache control header
   // if you are using CDN, can set it to 'max-age=0, s-maxage=10, must-revalidate'
   // it meaning cache 10s on CDN server and no cache on client side.
-  registryCacheControlHeader: '',
+  registryCacheControlHeader: "",
   // if you are using CDN, can set it to 'Accept, Accept-Encoding'
-  registryVaryHeader: '',
+  registryVaryHeader: "",
   // disable package search
   disableSearch: false,
 
   // view files directory
-  viewDir: path.join(root, 'view', 'web'),
+  viewDir: path.join(root, "view", "web-sunmi"),
+
+  // docs files directory
+  docDir: path.join(root, "docs", "web-sunmi"),
 
   customRegistryMiddlewares: [],
   customWebMiddlewares: [],
@@ -71,12 +74,13 @@ var config = {
   // for limit download rates
   limit: {
     enable: false,
-    token: 'koa-limit:download',
+    token: "koa-limit:download",
     limit: 1000,
     interval: 1000 * 60 * 60 * 24,
     whiteList: [],
     blackList: [],
-    message: 'request frequency limited, any question, please contact fengmk2@gmail.com',
+    message:
+      "request frequency limited, any question, please contact fengmk2@gmail.com",
   },
 
   enableCompress: false, // enable gzip response or not
@@ -84,52 +88,50 @@ var config = {
   // default system admins
   admins: {
     // name: email
-    fengmk2: 'fengmk2@gmail.com',
-    admin: 'admin@cnpmjs.org',
-    dead_horse: 'dead_horse@qq.com',
+    admin: "yunwei@sunmi.com",
   },
 
   // email notification for errors
   // check https://github.com/andris9/Nodemailer for more informations
   mail: {
     enable: false,
-    appname: 'cnpmjs.org',
-    from: 'cnpmjs.org mail sender <adderss@gmail.com>',
-    service: 'gmail',
+    appname: "cnpmjs.org",
+    from: "cnpmjs.org mail sender <adderss@gmail.com>",
+    service: "gmail",
     auth: {
-      user: 'address@gmail.com',
-      pass: 'your password'
-    }
+      user: "address@gmail.com",
+      pass: "your password",
+    },
   },
 
-  logoURL: 'https://os.alipayobjects.com/rmsportal/oygxuIUkkrRccUz.jpg', // cnpm logo image url
-  adBanner: '',
-  customHeader: '',
-  customReadmeFile: '', // you can use your custom readme file instead the cnpm one
-  customFooter: '', // you can add copyright and site total script html here
-  npmClientName: 'cnpm', // use `${name} install package`
+  logoURL: "https://static.cdn.sunmi.com/assets/cnpm/logo.jpg", // cnpm logo image url
+  adBanner: "",
+  customHeader: "",
+  customReadmeFile: "", // you can use your custom readme file instead the cnpm one
+  customFooter: "", // you can add copyright and site total script html here
+  npmClientName: "cnpm", // use `${name} install package`
   packagePageContributorSearch: true, // package page contributor link to search, default is true
 
   // max handle number of package.json `dependencies` property
   maxDependencies: 200,
   // backup filepath prefix
-  backupFilePrefix: '/cnpm/backup/',
+  backupFilePrefix: "/cnpm/backup/",
 
   /**
    * database config
    */
 
   database: {
-    db: 'cnpmjs_test',
-    username: 'root',
-    password: '',
+    db: "cnpmjs_test",
+    username: "root",
+    password: "root",
 
     // the sql dialect of the database
     // - currently supported: 'mysql', 'sqlite', 'postgres', 'mariadb'
-    dialect: 'sqlite',
+    dialect: "mysql",
 
     // custom host; default: 127.0.0.1
-    host: '127.0.0.1',
+    host: "127.0.0.1",
 
     // custom port; default: 3306
     port: 3306,
@@ -139,7 +141,7 @@ var config = {
     pool: {
       maxConnections: 10,
       minConnections: 0,
-      maxIdleTime: 30000
+      maxIdleTime: 30000,
     },
 
     dialectOptions: {
@@ -149,7 +151,7 @@ var config = {
 
     // the storage engine for 'sqlite'
     // default store into ~/.cnpmjs.org/data.sqlite
-    storage: path.join(dataDir, 'data.sqlite'),
+    // storage: path.join(dataDir, "data.sqlite"),
 
     logging: !!process.env.SQL_DEBUG,
   },
@@ -163,7 +165,7 @@ var config = {
 
   // package tarball store in local filesystem by default
   nfs: new Nfs({
-    dir: path.join(dataDir, 'nfs')
+    dir: path.join(dataDir, "nfs"),
   }),
   // if set true, will 302 redirect to `nfs.url(dist.key)`
   downloadRedirectToNFS: false,
@@ -173,7 +175,7 @@ var config = {
   unpublishRemoveTarball: true,
 
   // registry url name
-  registryHost: 'r.cnpmjs.org',
+  registryHost: "registry.npm.sunmi.com",
 
   /**
    * registry mode config
@@ -185,7 +187,7 @@ var config = {
   enablePrivate: false,
 
   // registry scopes, if don't set, means do not support scopes
-  scopes: [ '@cnpm', '@cnpmtest', '@cnpm-test' ],
+  scopes: ["@sbs"],
 
   // some registry already have some private packages in global scope
   // but we want to treat them as scoped private packages,
@@ -200,15 +202,15 @@ var config = {
   // cnpm wont directly sync from this one
   // but sometimes will request it for some package infomations
   // please don't change it if not necessary
-  officialNpmRegistry: 'https://registry.npmjs.com',
-  officialNpmReplicate: 'https://replicate.npmjs.com',
-  cnpmRegistry: 'https://r.cnpmjs.com',
+  officialNpmRegistry: "https://registry.npmjs.com",
+  officialNpmReplicate: "https://replicate.npmjs.com",
+  cnpmRegistry: "https://r.cnpmjs.com",
 
   // sync source, upstream registry
   // If you want to directly sync from official npm's registry
   // please drop them an email first
-  sourceNpmRegistry: 'https://registry.npm.taobao.org',
-  sourceNpmWeb: 'https://npm.taobao.org',
+  sourceNpmRegistry: "https://registry.npm.taobao.org",
+  sourceNpmWeb: "https://npm.taobao.org",
 
   // upstream registry is base on cnpm/cnpmjs.org or not
   // if your upstream is official npm registry, please turn it off
@@ -221,19 +223,19 @@ var config = {
   // none: do not sync any module, proxy all public modules from sourceNpmRegistry
   // exist: only sync exist modules
   // all: sync all modules
-  syncModel: 'none', // 'none', 'all', 'exist'
+  syncModel: "none", // 'none', 'all', 'exist'
   // sync package.json/dist-tag.json to sync dir
   syncBackupFiles: false,
 
   syncConcurrency: 1,
   // sync interval, default is 10 minutes
-  syncInterval: '10m',
+  syncInterval: "10m",
 
   // sync polular modules, default to false
   // because cnpm can't auto sync tag change for now
   // so we want to sync popular modules to ensure their tags
   syncPopular: false,
-  syncPopularInterval: '1h',
+  syncPopularInterval: "1h",
   // top 100
   topPopular: 100,
 
@@ -247,15 +249,17 @@ var config = {
   syncDownloadOptions: {
     // formatRedirectUrl: function (url, location)
   },
-  handleSyncRegistry: 'http://127.0.0.1:7001',
+  handleSyncRegistry: "http://127.0.0.1:7001",
 
   // default badge subject
-  badgeSubject: 'cnpm',
+  badgeSubject: "cnpm",
   // defautl use https://badgen.net/
   badgeService: {
-    url: function(subject, status, options) {
+    url: function (subject, status, options) {
       options = options || {};
-      let url = `https://badgen.net/badge/${utility.encodeURIComponent(subject)}/${utility.encodeURIComponent(status)}`;
+      let url = `https://badgen.net/badge/${utility.encodeURIComponent(
+        subject
+      )}/${utility.encodeURIComponent(status)}`;
       if (options.color) {
         url += `/${utility.encodeURIComponent(options.color)}`;
       }
@@ -266,7 +270,7 @@ var config = {
     },
   },
 
-  packagephobiaURL: 'https://packagephobia.now.sh',
+  packagephobiaURL: "https://packagephobia.now.sh",
   packagephobiaSupportPrivatePackage: false,
   packagephobiaMinDownloadCount: 1000,
 
@@ -284,7 +288,7 @@ var config = {
   httpProxy: null,
 
   // snyk.io root url
-  snykUrl: 'https://snyk.io',
+  snykUrl: "https://snyk.io",
 
   // https://github.com/cnpm/cnpmjs.org/issues/1149
   // if enable this option, must create module_abbreviated and package_readme table in database
@@ -295,7 +299,7 @@ var config = {
   globalHook: null,
 
   opensearch: {
-    host: '',
+    host: "",
   },
 
   // redis cache
@@ -320,35 +324,41 @@ var config = {
   accelerateHostMap: {},
 };
 
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === "test") {
   config.enableAbbreviatedMetadata = true;
   config.customRegistryMiddlewares.push((app) => {
     return function* (next) {
-      this.set('x-custom-middleware', 'true');
-      this.set('x-custom-app-models', typeof app.models.query === 'function' ? 'true' : 'false');
+      this.set("x-custom-middleware", "true");
+      this.set(
+        "x-custom-app-models",
+        typeof app.models.query === "function" ? "true" : "false"
+      );
       yield next;
     };
   });
 
   config.customWebMiddlewares.push((app) => {
     return function* (next) {
-      this.set('x-custom-web-middleware', 'true');
-      this.set('x-custom-web-app-models', typeof app.models.query === 'function' ? 'true' : 'false');
+      this.set("x-custom-web-middleware", "true");
+      this.set(
+        "x-custom-web-app-models",
+        typeof app.models.query === "function" ? "true" : "false"
+      );
       yield next;
     };
   });
 }
 
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== "test") {
   var customConfig;
-  if (process.env.NODE_ENV === 'development') {
-    customConfig = path.join(root, 'config', 'config.js');
+  if (process.env.NODE_ENV === "development") {
+    customConfig = path.join(root, "config", "config.js");
   } else {
     // 1. try to load `$dataDir/config.json` first, not exists then goto 2.
     // 2. load config/config.js, everything in config.js will cover the same key in index.js
-    customConfig = path.join(dataDir, 'config.json');
+    customConfig = path.join(dataDir, "config.json");
     if (!fs.existsSync(customConfig)) {
-      customConfig = path.join(root, 'config', 'config.js');
+      customConfig = path.join(root, "config", "config.js");
     }
   }
   if (fs.existsSync(customConfig)) {

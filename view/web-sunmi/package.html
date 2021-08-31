@@ -1,0 +1,294 @@
+<div class="pack-overview-background"></div>
+<div class="pack-overview">
+  <div class="pack-info">
+    <% if (package.deprecated) { %>
+      <div class="pack-name deprecated">
+        <%= package.name %>
+      </div>
+      <% if (package.description) {%>
+        <p class="pack-description deprecated">
+          <%= package.description %>
+        </p>
+        <% } %>
+          <div class="deprecated-content" title="<%= package.deprecated %>">
+            <%= package.deprecated %>
+          </div>
+          <% } else { %>
+            <div class="pack-name">
+              <%= package.name %>
+            </div>
+            <% if (package.description) {%>
+              <div class="pack-description" title="<%= package.description %>">
+                <%= package.description %>
+              </div>
+              <% } %>
+                <% } %>
+                  <div class="pack-ver">
+                    <span>
+                      <%= package.version %>
+                    </span>
+                    <% if (package.engines) { %>
+                      <% for (var k in package.engines) { var engine=package.engines[k]; %>
+                        <img title="<%= engine.title %>" src="<%- engine.badgeURL %>">
+                        <% } } %>
+                          <% if (package.snyk) { %>
+                            <a class="badge-link" href="<%= package.snyk.url %>" target="_blank"><img
+                                title="Known Vulnerabilities" src="<%- package.snyk.badge %>"></a>
+                            <% } %>
+
+                              <% if (package.packagephobia) { %>
+                                <a class="badge-link" href="<%= package.packagephobia.url %>" target="_blank"><img
+                                    title="Install Size" src="<%- package.packagephobia.badge %>"></a>
+                                <% } %>
+                  </div>
+                  <div class="pack-repo">
+                    <% if (package.fromNow) { %>
+                      <div class="pack-lastup">
+                        Last updated <%= package.fromNow %>
+                          <% if (package.lastPublishedUser) { var name=package.lastPublishedUser.name; %>
+                            by <a href="/~<%= name %>">
+                              <%= name %>
+                            </a>
+                            <% } %>
+                              .
+                      </div>
+                      <% } %>
+
+                        <% if (package.license) { %>
+                          <a href="<%= package.license.url %>" target="_blank">
+                            <%= package.license.name %>
+                          </a>
+                          <% } %>
+
+                            <% if (package.repository) { %>
+                              <% if (package.license) {%> &middot; <% } %>
+                                  <a href="<%= package.repository.weburl %>" target="_blank">Repository</a>
+                                  <% } %>
+
+                                    <% if (package.bugs.url) { %>
+                                      <% if (package.license || package.repository) {%> &middot; <% } %>
+                                          <a href="<%= package.bugs.url %>" target="_blank">Bugs</a>
+                                          <% } %>
+
+                                            <% if (package.license || package.repository || package.bugs.url) {%>
+                                              &middot; <% } %>
+
+                                                <% if (!package.isPrivate) { %>
+                                                  <a href="https://www.npmjs.org/package/<%= package.name %>/v/<%= package.version %>"
+                                                    target="_blank">Original npm</a>
+                                                  <% } %>
+
+                                                    <% if (package.dist.tarball) { %>
+                                                      &middot;
+                                                      <a href="<%= package.dist.tarball %>" target="_blank">Tarball</a>
+                                                      <% } %>
+
+                                                        <% if (package.registryPackageUrl) { %>
+                                                          &middot;
+                                                          <a href="<%= package.registryPackageUrl %>"
+                                                            target="_blank">package.json</a>
+                                                          <% } %>
+                  </div>
+                  <div class="pack-install">
+                    <pre
+                      class="sh">$ <%- config.npmClientName %> install <%= package.name %> <% if (package.preferGlobal) { %>-g<% } %></pre>
+                    <div class="pack-sync">
+                      <% if (package.isPrivate) { %>
+                        Private package
+                        <% } else { %>
+                          <a href="/sync/<%= package.name %>" target="_blank">SYNC</a> missed versions from
+                          <a href="<%= package.registryUrl %>" target="_blank">official npm registry</a>.
+                          <% } %>
+                    </div>
+                  </div>
+  </div>
+</div>
+
+<div class="ant-row">
+  <div class="pack-readme ant-col-17">
+    <section id="readme" class="markdown-body">
+      <%- package.readme || 'No README was found.' %>
+
+        <h2>Current Tags</h2>
+        <ul>
+          <% for (const item of package.tags) { %>
+            <li>
+              <a href="/package/<%- package.name %>/v/<%= item.version %>">
+                <%= item.version %>
+              </a>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              ...
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <span>
+                <%= item.tag %>
+              </span>
+              <% if (item.fromNow) { %>(<span>
+                  <%= item.fromNow %>
+                </span>)<% } %>
+            </li>
+            <% } %>
+        </ul>
+
+        <h2>
+          <%= package.versions.length %> Versions
+        </h2>
+        <ul>
+          <% for (const item of package.versions) { %>
+            <li>
+              <a href="/package/<%- package.name %>/v/<%= item.version %>" <% if (item.deprecated) { %>
+                style="color:red" title="<%= item.deprecated %>" <% } %>
+                    >
+                    <%= item.version %>
+              </a>
+              <% if (item.deprecated) { %>
+                [deprecated]
+                <% } else { %>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <% } %>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    ...
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>
+                      <%= item.fromNow %>
+                    </span>
+            </li>
+            <% } %>
+        </ul>
+    </section>
+  </div>
+
+  <div class="pack-details cols-box ant-col-6 ant-col-offset-1">
+
+    <div class="pack-maintainers cols-box-item">
+      <div class="cols-box-title">
+        <% var maintainers=package.maintainers || []; var l=maintainers.length %>
+          Maintainers <%= l> 0 ? ' (' + l + ')' : '' %>
+      </div>
+      <div class="maintainers">
+        <% for (var i=0; i < maintainers.length; i ++) { %>
+          <div class="maintainer">
+            <a class="username" href="/~<%= maintainers[i].name %>">
+              <img
+                src="data:image/svg+xml;utf8,%3Csvg%20height%3D%22100%22%20viewBox%3D%22-27%2024%20100%20100%22%20width%3D%22100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%3Cdefs%3E%3Ccircle%20cx%3D%2223%22%20cy%3D%2274%22%20id%3D%22a%22%20r%3D%2250%22%2F%3E%3C%2Fdefs%3E%3Cuse%20fill%3D%22%23F5EEE5%22%20overflow%3D%22visible%22%20xlink%3Ahref%3D%22%23a%22%2F%3E%3CclipPath%20id%3D%22b%22%3E%3Cuse%20overflow%3D%22visible%22%20xlink%3Ahref%3D%22%23a%22%2F%3E%3C%2FclipPath%3E%3Cg%20clip-path%3D%22url(%23b)%22%3E%3Cdefs%3E%3Cpath%20d%3D%22M36%2095.9c0%204%204.7%205.2%207.1%205.8%207.6%202%2022.8%205.9%2022.8%205.9%203.2%201.1%205.7%203.5%207.1%206.6v9.8H-27v-9.8c1.3-3.1%203.9-5.5%207.1-6.6%200%200%2015.2-3.9%2022.8-5.9%202.4-.6%207.1-1.8%207.1-5.8V85h26v10.9z%22%20id%3D%22c%22%2F%3E%3C%2Fdefs%3E%3Cuse%20fill%3D%22%23E6C19C%22%20overflow%3D%22visible%22%20xlink%3Ahref%3D%22%23c%22%2F%3E%3CclipPath%20id%3D%22d%22%3E%3Cuse%20overflow%3D%22visible%22%20xlink%3Ahref%3D%22%23c%22%2F%3E%3C%2FclipPath%3E%3Cpath%20clip-path%3D%22url(%23d)%22%20d%3D%22M23.2%2035h.2c3.3%200%208.2.2%2011.4%202%203.3%201.9%207.3%205.6%208.5%2012.1%202.4%2013.7-2.1%2035.4-6.3%2042.4-4%206.7-9.8%209.2-13.5%209.4H23h-.1c-3.7-.2-9.5-2.7-13.5-9.4-4.2-7-8.7-28.7-6.3-42.4%201.2-6.5%205.2-10.2%208.5-12.1%203.2-1.8%208.1-2%2011.4-2h.2z%22%20fill%3D%22%23D4B08C%22%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%22M22.6%2040c19.1%200%2020.7%2013.8%2020.8%2015.1%201.1%2011.9-3%2028.1-6.8%2033.7-4%205.9-9.8%208.1-13.5%208.3h-.5c-3.8-.3-9.6-2.5-13.6-8.4-3.8-5.6-7.9-21.8-6.8-33.8C2.3%2053.7%203.5%2040%2022.6%2040z%22%20fill%3D%22%23F2CEA5%22%2F%3E%3C%2Fsvg%3E"
+                class="ant-avatar ant-avatar-circle">
+              <%= maintainers[i].name %>
+            </a>
+          </div>
+          <% } %>
+      </div>
+    </div>
+
+    <div class="pack-downloads cols-box-item">
+      <div class="cols-box-title">
+        Downloads
+      </div>
+      <div class="downloads">
+        <div class="row">
+          Today
+          <span class="pack-download-num">
+            <%= download.today %>
+          </span>
+        </div>
+        <div class="row">
+          This Week
+          <span class="pack-download-num">
+            <%= download.thisweek %>
+          </span>
+        </div>
+        <div class="row">
+          This Month
+          <span class="pack-download-num">
+            <%= download.thismonth %>
+          </span>
+        </div>
+        <div class="row">
+          Last Day
+          <span class="pack-download-num">
+            <%= download.lastday %>
+          </span>
+        </div>
+        <div class="row">
+          Last Week
+          <span class="pack-download-num">
+            <%= download.lastweek %>
+          </span>
+        </div>
+        <div class="row">
+          Last Month
+          <span class="pack-download-num">
+            <%= download.lastmonth %>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="pack-dep cols-box-item">
+      <div class="cols-box-title">
+        <% var deps=Object.keys(package.dependencies || {}); var l=deps.length; %>
+          Dependencies<%= ' (' + l + ')' %>
+
+      </div>
+      <% if (l) { %>
+        <ul>
+          <% deps.forEach(function(pkg, i) { %>
+            <li>
+              <a class="pack-dep-name" target="_blank" href="/package/<%= pkg %>">
+                <%= pkg %>
+              </a>
+              <span class="pack-dep-ver">
+                <%= package.dependencies[pkg]%>
+              </span>
+            </li>
+            <% }); %>
+        </ul>
+        <% } else { %>
+          None
+          <% } %>
+    </div>
+    <div class="pack-dep cols-box-item">
+      <div class="cols-box-title">
+        <% var deps=Object.keys(package.devDependencies || {}); var l=deps.length; %>
+          Dev Dependencies<%= ' (' + l + ')' %>
+
+      </div>
+      <% if (l) { %>
+        <ul>
+          <% deps.forEach(function(pkg, i) { %>
+            <li>
+              <a class="pack-dep-name" target="_blank" href="/package/<%= pkg %>">
+                <%= pkg %>
+              </a>
+              <span class="pack-dep-ver">
+                <%= package.devDependencies[pkg]%>
+              </span>
+            </li>
+            <% }); %>
+        </ul>
+        <% } else { %>
+          None
+          <% } %>
+    </div>
+
+    <div class="pack-dep cols-box-item">
+      <div class="cols-box-title">
+        <% var deps=package.dependents; var l=deps.length; %>
+          Dependents<%= ' (' + l + ')' %>
+
+      </div>
+      <% if (l) { %>
+        <ul>
+          <% deps.forEach(function(pkg) { %>
+            <li>
+              <a class="pack-dep-name" target="_blank" href="/package/<%= pkg %>">
+                <%= pkg %>
+              </a>
+            </li>
+            <% }); %>
+        </ul>
+        <% } else { %>
+          None
+          <% } %>
+    </div>
+
+  </div>
+</div>

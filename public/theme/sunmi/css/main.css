@@ -1,0 +1,202 @@
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+#header.ant-layout-header {
+  background-color: #fff;
+  box-shadow: 0 4px 13px -3px rgb(0 0 0 / 10%);
+  border-bottom: 1px solid #d2d2d2;
+}
+
+#header .logo img {
+  height: 40px;
+}
+
+#main {
+  padding: 30px 50px;
+  position: relative;
+}
+
+code {
+  padding: 2px 4px;
+  font-size: 95%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+
+img {
+  vertical-align: middle;
+}
+
+pre {
+  margin-bottom: 20px;
+  background: #333;
+  color: #fff;
+  border-radius: 6px;
+  margin-top: 30px;
+  padding: 10px 20px;
+  word-wrap: break-word;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre-wrap;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+#search .ant-alert {
+  margin-bottom: 20px;
+}
+
+.pack-overview-background {
+  height: 200px;
+  background: #428bca;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+  left: 0;
+  top: 0;
+}
+.pack-overview {
+  color: #f1f1f1;
+  height: 170px;
+  width: 100%;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.pack-overview a {
+  color: #f1f1f1;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  padding-bottom: 2px;
+  border-bottom: 1px solid;
+}
+.pack-overview a:hover {
+  color: #fff;
+  opacity: 0.7;
+}
+.pack-info {
+  margin: 0 auto;
+  font-size: 18px;
+  line-height: 25px;
+}
+.pack-name {
+  font-size: 28px;
+  line-height: 28px;
+  color: #fff;
+}
+.pack-description {
+  margin-top: 10px;
+  display: block;
+  display: -webkit-box;
+  width: 600px;
+  font-size: 16px;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 100px;
+}
+.deprecated {
+  text-decoration: line-through;
+  color: #bdbdbd;
+}
+.deprecated-content {
+  color: #555;
+  width: 600px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-style: italic;
+}
+.pack-ver {
+  font-size: 16px;
+  line-height: 16px;
+  margin-top: 10px;
+}
+.pack-repo {
+  position: absolute;
+  bottom: 10px;
+  text-align: right;
+  width: 100%;
+  font-size: 14px;
+}
+.pack-lastup {
+  float: left;
+}
+.pack-install {
+  position: absolute;
+  top: 0;
+  right: 0px;
+  max-width: 450px;
+}
+.pack-sync {
+  font-size: 16px;
+}
+
+.pack-details a {
+  color: #333333;
+}
+
+.pack-details a:hover {
+  border-bottom: 1px solid;
+  opacity: 0.8;
+}
+
+.cols-box ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cols-box-item {
+  margin-bottom: 15px;
+}
+
+.cols-box-item:last-child {
+  margin-right: 0;
+}
+
+.cols-box-title {
+  font-size: 20px;
+  color: #428bca;
+  margin-bottom: 10px;
+  font-weight: bold;
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 3px;
+}
+.cols-box-item .more-item {
+  font-size: 16px;
+  line-height: 28px;
+  color: #428bca;
+  margin-top: 15px;
+}
+.pack-dep-ver,
+.pack-download-num {
+  float: right;
+}
+.pack-lastup,
+.pack-sync {
+  float: left;
+}
+
+.maintainer {
+  margin-bottom: 10px;
+  line-height: 30px;
+  overflow: hidden;
+}
+.maintainer a:hover {
+  font-style: italic;
+  border: none;
+}
+.maintainer .ant-avatar {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}

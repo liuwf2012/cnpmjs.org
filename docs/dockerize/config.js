@@ -45,6 +45,10 @@ var config = {
   uploadDir: path.join(dataDir, "downloads"),
   // web page viewCache
   viewCache: false,
+  // view files directory
+  viewDir: path.join(root, "view", "web-sunmi"),
+  // doc files directory
+  docDir: path.join(root, "docs", "web-sunmi"),
 
   // config for koa-limit middleware
   // for limit download rates
@@ -81,11 +85,11 @@ var config = {
     },
   },
 
-  logoURL: "https://os.alipayobjects.com/rmsportal/oygxuIUkkrRccUz.jpg", // cnpm logo image url
+  logoURL: "https://static.cdn.sunmi.com/assets/cnpm/logo.jpg", // cnpm logo image url
   adBanner: "",
   customReadmeFile: "", // you can use your custom readme file instead the cnpm one
   customFooter: "", // you can add copyright and site total script html here
-  npmClientName: "cnpm", // use `${name} install package`
+  npmClientName: "npm", // use `${name} install package`
   packagePageContributorSearch: true, // package page contributor link to search, default is true
 
   // max handle number of package.json `dependencies` property
@@ -135,7 +139,7 @@ var config = {
   downloadRedirectToNFS: false,
 
   // registry url name
-  registryHost: "127.0.0.1:7001",
+  registryHost: "registry.npm.sunmi.com",
 
   /**
    * registry mode config
